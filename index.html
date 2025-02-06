@@ -7,24 +7,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            text-align: left; /* 전체 텍스트 왼쪽 정렬 */
             margin: 20px;
         }
-        .user-info {
-            margin-top: 20px;
-        }
-        .user-info label {
-            font-size: 14px;
-            margin-right: 5px;
-        }
-        .user-info input {
-            width: 150px;
-            margin-right: 10px;
-            padding: 5px;
-            font-size: 14px;
-        }
         table {
-            margin: 20px auto;
+            margin: 20px;
             border-collapse: collapse;
         }
         td {
@@ -45,10 +32,10 @@
             font-size: 16px;
         }
         input:enabled {
-            border: 1px solid black; /* 답 입력 가능한 칸에만 테두리 추가 */
+            border: 1px solid black;
         }
         input:disabled {
-            background-color: #EAD1DC; /* 배경색 변경 */
+            background-color: #EAD1DC;
         }
         .hint {
             position: absolute;
@@ -58,91 +45,73 @@
             color: black;
             z-index: 2;
         }
-        h2 {
-            font-weight: bold;
-        }
-        .quiz-text {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- 제목과 이름, 소속 입력란 -->
-    <h1>내가 바로 티웨이 안전왕😎✨</h1>
-    <div class="user-info">
-        <label for="name">이름:</label>
-        <input type="text" id="name" placeholder="이름을 입력하세요">
-        <label for="department">소속:</label>
-        <input type="text" id="department" placeholder="소속을 입력하세요">
-    </div>
+    <h1>내가 바로 티웨이 안전왕</h1>
 
     <table>
         <tbody>
             <script>
-                // Initialize a 21x13 crossword grid, default all cells to disabled
-                let crossword = Array(21).fill(null).map(() => Array(13).fill(false));
+                let crossword = Array(17).fill(null).map(() => Array(13).fill(false));
 
-                // Define allowed inputs for vertical words
-                // a: M열 1행부터 세로로 6칸
-                for (let i = 0; i < 6; i++) crossword[i][12] = true;
+                // ② (가로) - 최상단으로 이동
+                for (let i = 0; i < 9; i++) crossword[0][i] = true;
 
-                // b: K열 5행부터 세로로 3칸
+                // ⓒ (세로) - 최상단에서 시작
+                for (let i = 0; i < 4; i++) crossword[i][1] = true;
+
+                // ⓓ (세로) - 최상단에서 시작
+                for (let i = 0; i < 4; i++) crossword[i][3] = true;
+
+                // ⓐ (세로)
+                for (let i = 1; i < 7; i++) crossword[i][12] = true;
+
+                // ⓑ (세로)
                 for (let i = 4; i < 7; i++) crossword[i][10] = true;
 
-                // c: B열 9행부터 세로로 4칸
-                for (let i = 8; i < 12; i++) crossword[i][1] = true;
+                // ⓔ (세로)
+                for (let i = 12; i < 16; i++) crossword[i - 4][8] = true;
 
-                // d: D열 8행부터 세로로 4칸
-                for (let i = 7; i < 11; i++) crossword[i][3] = true;
+                // ⓕ (세로)
+                for (let i = 14; i < 18; i++) crossword[i - 4][10] = true;
 
-                // e: I열 13행부터 세로로 4칸
-                for (let i = 12; i < 16; i++) crossword[i][8] = true;
+                // ⓖ (세로)
+                for (let i = 17; i < 21; i++) crossword[i - 4][5] = true;
 
-                // f: K열 15행부터 세로로 4칸
-                for (let i = 14; i < 18; i++) crossword[i][10] = true;
+                // ① (가로)
+                for (let i = 5; i < 13; i++) crossword[5 - 4][i] = true;
 
-                // g: F열 18행부터 세로로 4칸
-                for (let i = 17; i < 21; i++) crossword[i][5] = true;
+                // ③ (가로)
+                for (let i = 8; i < 13; i++) crossword[12 - 4][i] = true;
 
-                // Define allowed inputs for horizontal words
-                // ①: 6행 F열부터 가로로 8칸
-                for (let i = 5; i < 13; i++) crossword[5][i] = true;
+                // ④ (가로)
+                for (let i = 8; i < 11; i++) crossword[14 - 4][i] = true;
 
-                // ②: 9행 A열부터 가로로 9칸
-                for (let i = 0; i < 9; i++) crossword[8][i] = true;
+                // ⑤ (가로)
+                for (let i = 5; i < 9; i++) crossword[15 - 4][i] = true;
 
-                // ③: 13행 I열부터 가로로 5칸
-                for (let i = 8; i < 13; i++) crossword[12][i] = true;
+                // ⑥ (가로)
+                for (let i = 3; i < 11; i++) crossword[17 - 4][i] = true;
 
-                // ④: 15행 I열부터 가로로 3칸
-                for (let i = 8; i < 11; i++) crossword[14][i] = true;
-
-                // ⑤: 16행 F열부터 가로로 4칸
-                for (let i = 5; i < 9; i++) crossword[15][i] = true;
-
-                // ⑥: 18행 D열부터 가로로 8칸
-                for (let i = 3; i < 11; i++) crossword[17][i] = true;
-
-                // 힌트 번호 위치 설정
                 let hints = {
-                    '0_12': 'ⓐ',
+                    '0_0': '②',
+                    '0_1': 'ⓒ',
+                    '0_3': 'ⓓ',
+                    '1_12': 'ⓐ',
                     '4_10': 'ⓑ',
                     '5_5': '①',
-                    '7_3': 'ⓓ',
-                    '8_0': '②',
-                    '8_1': 'ⓒ',
-                    '12_8': '③ⓔ',
-                    '14_8': '④',
-                    '14_10': 'ⓕ',
-                    '15_5': '⑤',
-                    '17_3': '⑥',
-                    '17_5': 'ⓖ'
+                    '8_8': '③ⓔ',
+                    '10_8': '④',
+                    '10_10': 'ⓕ',
+                    '11_5': '⑤',
+                    '13_3': '⑥',
+                    '13_5': 'ⓖ'
                 };
 
-                // Render the crossword table
                 document.write('<table>');
-                for (let row = 0; row < 21; row++) {
+                for (let row = 0; row < 17; row++) {
                     document.write('<tr>');
                     for (let col = 0; col < 13; col++) {
                         let enabled = crossword[row][col] ? '' : 'disabled';
@@ -156,28 +125,24 @@
         </tbody>
     </table>
 
-    <!-- 문제 텍스트 추가 -->
     <div class="quiz-text">
         <h2>[가로 낱말 퍼즐]</h2>
-        <p>① 안전 신고/제안에 대한 포상 등급 중 하나로, 안전 신고의 결과로 인명피해 예방 및 1억 이상의 재산 손실 예방에 기여한 자에게 수여되는 포상 이름. ○○○○-○○○○상의 포상금은 100만 원</p>
-        <p>② 회사의 안전 수준 관리를 위해 국가 항공 안전 프로그램의 체계 안에서 운영하는 시스템을 말한다. 영문으로는 SMS(Safety Management System)라고 칭하며, 티웨이항공은 ○○○○○○○○○ 매뉴얼에 안전에 관한 정책, 목표, 구성원의 역할과 책임, 위험관리 절차, 안전 보증, 안전 증진 등을 수록함으로써 회사의 안전수준 관리를 이행하고 있다.</p>
-        <p>③ 안전 운항 회의체 중 하나로, 회사의 안전관리에 대한 주요한 사항을 심의, 의결하기 위하여 운영하는 가장 높은 수준의 회의체이다. 최고경영관리자가 위원장으로 구성되며, 분기별 1회 실시한다. SRB(Safety Review Board).</p>
-        <p>④ 안전 보고제도 중 비밀 보고의 경우 자율 보고의 활성화와 동기 부여를 위하여 ○○○의 익명성이 철저히 보장된다. 비밀 보고는 TOPS 내 비밀 보고 양식에서 자유로운 형식으로 제출할 수 있다.</p>
-        <p>⑤ 안전 보고제도 중 하나로 전 임직원은 항공 안전, 보안 관계 법령에서 정한 ○○○○대상, 인명 및 재산상의 손실 또는 피해, 법규 위반 사례, 보안 위해요소/보안사고 등이 발생 시 TOPS 내 ○○○○를 작성하여 제출하여야 한다.</p>
-        <p>⑥ 한국교통안전공단에서 운영하는 보고제도로 사고 발생의 위해 요인을 발굴하여 예방적 안전관리를 위한 필수 요소이다. 한국교통안전공단 홈페이지(홈페이지 : http://www.airsafety.or.kr)에서 보고를 접수할 수 있으며 보고 시 작성자에게 소정의 상품을 제공한다. ○○○○○○○○제도(KAIRS).</p>
+        <p>① 안전 신고/제안에 대한 포상 등급 중 하나로, 안전 신고의 결과로 인명피해 예방 및 1억 이상의 재산 손실 예방에 기여한 자에게 수여되는 포상 이름.</p>
+        <p>② 회사의 안전 수준 관리를 위해 운영하는 시스템으로, SMS(Safety Management System)라고 불린다.</p>
+        <p>③ 회사의 안전관리에 대한 주요 사항을 심의하는 최고 수준의 회의체 (SRB).</p>
+        <p>④ 안전 보고제도 중 비밀 보고의 경우, 익명성이 철저히 보장된다.</p>
+        <p>⑤ 전 임직원이 항공 안전과 관련한 사고를 보고하는 제도.</p>
+        <p>⑥ 한국교통안전공단에서 운영하는 보고제도 (KAIRS).</p>
 
-        <img src="tway.png" alt="티웨이 홍보 이미지" style="width: 661px; height: 775px;">
-        
         <h2>[세로 낱말 퍼즐]</h2>
-        <p>ⓐ 티웨이항공은 안전 및 보안 관련 보고서 제출, 위해 요인 식별/분석/관리 및 부문별 품질 심사 계획/실적 관리 등의 활동을 데이터베이스화할 수 있는 운영체계인 TOPS(T’way ○○○○○○ Program of Safety & Security)를 운영하고 있다.</p>
-        <p>ⓑ 안전 신고 접수처 중 하나로, 사내 임직원이 또는 외부 협력업체 임직원이 잠재적 위해 요인을 식별한 경우 ○○○@twayair.com에 자유로운 형식으로 보고할 수 있다.</p>
-        <p>ⓒ 비처벌 보고제도의 회사 정책으로, 사람의 판단 및 절차상 수행 과정에서의 정상적 실수를 인정하여 중과실 혹은 중대한 위법 행위를 제외한 각종 사고, 준사고 및 비정상 상황에서는 처벌하지 않는 ○○○○정책이다. 영문으로 Just Culture.</p>
-        <p>ⓓ 티웨이항공 안전 보안실은 안전관리정책 방향과 일치 여부를 정기적으로 연 1회 검토하여 안전위원회에서 심의한 후 최고경영관리자의 의결을 받아 회사의 ○○○○에 반영하여 ○○○○선언문을 전사에 게시한다.</p>
-        <p>ⓔ ○○○○제도는 ○○○○를 통하여 항공기 사고/준사고, 항공 안전 장애 등 안전사고를 유발할 가능성이 있는 위해 요인들을 사전에 파악하여 제거함으로써 사고를 미연에 방지하고 안전 문화 증진을 도모하는 데 목적이 있다. 의무 보고, 자율 보고, 비밀 보고 등으로 구성되어 있다.</p>
-        <p>ⓕ TOPS 내에서 의무 보고 대상 외 안전·보안에 영향을 줄 수 있는 잠재적 위해 요인이나 사고를 미연에 방지하기 위한 제언 등을 포함하여 자율적으로 보고하는 제도를 일컫는다.</p>
-        <p>ⓖ ○○○○란 티웨이항공의 안전성과의 모니터링 평가를 위한 척도로, 회사가 안전하게 운영되고 있는지를 측정하고, 안전 목표의 달성 여부를 측정한다. ○○○○지표는 관리 리스크 지표, 운영리스크 지표로 구성된다. 그룹웨어 메인 페이지에서 티웨이항공의 ○○○○의 월별/분기별 모니터링 결과를 조회할 수 있다.</p>
-
-        <img src="zoo.png" alt="zoo 이미지" style="width: 380px; height: 350px;">
+        <p>ⓐ 티웨이항공의 안전·보안 데이터 관리 운영체계 (TOPS).</p>
+        <p>ⓑ 안전 신고 접수처 중 하나 (이메일 보고).</p>
+        <p>ⓒ 비처벌 보고제도로, Just Culture 정책.</p>
+        <p>ⓓ 안전관리정책 방향 검토 후 반영되는 ○○○○선언문.</p>
+        <p>ⓔ 사고 발생 가능성을 줄이기 위한 보고제도.</p>
+        <p>ⓕ 의무 보고 대상 외 안전·보안 관련 제언 보고 제도.</p>
+        <p>ⓖ 티웨이항공의 안전성과 평가 지표.</p>
     </div>
+
 </body>
 </html>
